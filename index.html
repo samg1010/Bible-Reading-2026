@@ -36,15 +36,15 @@
 
         <!-- CONTROLS -->
         <div class="controls">
-            <label for="version"><strong>Bible Version:</strong> </label>
-            <select id="version">
-                <option value="NIV">NIV (English)</option>
-                <option value="KJV">KJV (English)</option>
-                <option value="ESV">ESV (English)</option>
-                <option value="NLT">NLT (English)</option>
-                <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
-                <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
-            </select>
+          <div style="margin-bottom:10px;"><strong>Bible Version:</strong></div>
+    <select id="version" style="width:100%; max-width:280px; padding:12px; font-size:1.1em; border-radius:8px;">
+        <option value="NIV">NIV (English)</option>
+        <option value="KJV">KJV (English)</option>
+        <option value="ESV">ESV (English)</option>
+        <option value="NLT">NLT (English)</option>
+        <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
+        <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
+    </select>
             <br><br>
             <label for="datePicker"><strong>Select any day (for catch-up):</strong> </label>
             <input type="date" id="datePicker" min="2026-01-01" max="2026-12-31" value="2026-01-01">
@@ -141,6 +141,7 @@
     </script>
 </body>
 </html>
+
 
 
 

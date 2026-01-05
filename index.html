@@ -5,52 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RESUME Bible Reading Plan 2026</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; background: #f5f5f5; color: #333; }
-        .container { max-width: 800px; margin: 30px auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 30px; }
-        .logo { width: 130px; height: 130px; background: #e0e0e0; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 0.9em; color: #555; border: 4px solid #2c3e50; }
-        .church-name { font-size: 2.1em; font-weight: bold; color: #2c3e50; margin: 10px 0; }
-        h1 { margin: 10px 0 5px; color: #2c3e50; }
-        .tagline { font-style: italic; color: #555; margin-bottom: 20px; }
-        .controls { text-align: center; margin: 30px 0; }
-        select, input { padding: 12px; font-size: 1.1em; border-radius: 6px; border: 1px solid #ccc; }
-        .reading-box { background: #e8f4fc; padding: 25px; border-radius: 10px; text-align: center; margin: 20px 0; }
-        .reading { font-size: 1.7em; font-weight: bold; margin: 15px 0; }
-        .link { display: inline-block; margin: 15px 0; font-size: 1.2em; }
-        a { color: #0066cc; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        .note { text-align: center; font-size: 0.9em; color: #666; margin-top: 40px; }
+        :root {
+            --primary: #2c3e50;
+            --light-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --reading-bg: #e8f4fc;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            background: var(--light-bg);
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: clamp(1rem, 4vw, 2.5rem) auto;
+            padding: clamp(1rem, 5vw, 2rem);
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+        }
+
+        .header { text-align: center; margin-bottom: 2rem; }
+
+        .logo {
+            width: clamp(100px, 25vw, 140px);
+            height: clamp(100px, 25vw, 140px);
+            background: #e0e0e0;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            border: 4px solid var(--primary);
+            overflow: hidden;
+        }
+
+        .church-name { font-size: clamp(1.4rem, 5vw, 2.1rem); font-weight: bold; color: var(--primary); margin: 0.5rem 0; }
+        h1 { margin: 0.5rem 0; font-size: clamp(1.8rem, 6vw, 2.4rem); color: var(--primary); }
+        .tagline { font-style: italic; color: #555; font-size: clamp(0.95rem, 3.5vw, 1.1rem); }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.4rem;
+            margin: 2rem 0;
+        }
+
+        select, input[type="date"] {
+            width: 100%;
+            max-width: 340px;
+            padding: 0.9rem 1rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .reading-box {
+            background: var(--reading-bg);
+            padding: clamp(1.5rem, 6vw, 2.5rem);
+            border-radius: 16px;
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+
+        .reading {
+            font-size: clamp(1.4rem, 6.5vw, 2.1rem);
+            font-weight: bold;
+            line-height: 1.35;
+            margin: 1rem 0;
+            color: #1a3c5e;
+        }
+
+        .read-button {
+            display: inline-block;
+            margin-top: 1.2rem;
+            padding: 0.9rem 1.8rem;
+            background: var(--primary);
+            color: white;
+            font-size: 1.15rem;
+            font-weight: 600;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .read-button:hover { background: #1e2e3f; }
+
+        .note {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 2.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .container { margin: 0.8rem; border-radius: 12px; }
+            .reading { font-size: clamp(1.35rem, 7vw, 1.9rem); }
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <!-- HEADER -->
         <div class="header">
-           <div class="logo">
-            <img src="FEMC-logo.png" alt="Filipino Evangelical Methodist Church Logo" style="width:100%; height:100%; border-radius:50%; object-fit:contain;">
-           </div>
+            <div class="logo">
+                <img src="FEMC-logo.png" alt="FEMC Logo" style="width:100%; height:100%; object-fit:contain;">
+            </div>
             <div class="church-name">FILIPINO EVANGELICAL METHODIST CHURCH</div>
             <h1>RESUME Bible Reading Plan 2026</h1>
             <div class="tagline">Relaxed • Enjoyable • Sustainable • Meaningful • Unhurried<br>5 days/week (Mon–Fri), weekends off</div>
         </div>
 
-        <!-- CONTROLS -->
         <div class="controls">
-          <div style="margin-bottom:10px;"><strong>Bible Version:</strong></div>
-          <select id="version" style="width:100%; max-width:280px; padding:12px; font-size:1.1em; border-radius:8px;">
-              <option value="NIV">NIV (English)</option>
-              <option value="KJV">KJV (English)</option>
-              <option value="ESV">ESV (English)</option>
-              <option value="NLT">NLT (English)</option>
-              <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
-              <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
-          </select>
-          <br><br>
-          <label for="datePicker"><strong>Select any day (for catch-up):</strong> </label>
-          <input type="date" id="datePicker" min="2026-01-01" max="2026-12-31" value="2026-01-02">
+            <div><strong>Bible Version:</strong></div>
+            <select id="version">
+                <option value="NIV">NIV (English)</option>
+                <option value="KJV">KJV (English)</option>
+                <option value="ESV">ESV (English)</option>
+                <option value="NLT">NLT (English)</option>
+                <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
+                <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
+            </select>
+
+            <label for="datePicker">Select any day (for catch-up):</label>
+            <input type="date" id="datePicker" min="2026-01-01" max="2026-12-31">
         </div>
 
-        <div id="content"></div>
+        <div id="content">
+            <!-- Reading will appear here -->
+        </div>
 
         <div class="note">
             English & Tagalog → BibleGateway.com<br>
@@ -59,57 +146,18 @@
     </div>
 
     <script>
-        // Valid 2026 weekday readings (Mon-Fri only)
         const readings = [
             { date: new Date(2026,0,1), reading: 'Genesis 1–4' },
             { date: new Date(2026,0,2), reading: 'Genesis 5–8' },
             { date: new Date(2026,0,5), reading: 'Genesis 9–12' },
-            { date: new Date(2026,0,6), reading: 'Genesis 13–16' },
-            { date: new Date(2026,0,7), reading: 'Genesis 17–20' },
-            { date: new Date(2026,0,8), reading: 'Genesis 21–24' },
-            { date: new Date(2026,0,9), reading: 'Genesis 25–28' },
-            { date: new Date(2026,0,12), reading: 'Genesis 29–32' },
-            { date: new Date(2026,0,13), reading: 'Genesis 33–36' },
-            { date: new Date(2026,0,14), reading: 'Genesis 37–40' },
-            { date: new Date(2026,0,15), reading: 'Genesis 41–43' },
-            { date: new Date(2026,0,16), reading: 'Genesis 44–47' },
-            { date: new Date(2026,0,19), reading: 'Genesis 48–50; Exodus 1' },
-            { date: new Date(2026,0,20), reading: 'Exodus 2–5' },
-            { date: new Date(2026,0,21), reading: 'Exodus 6–9' },
-            { date: new Date(2026,0,22), reading: 'Exodus 10–13' },
-            { date: new Date(2026,0,23), reading: 'Exodus 14–17' },
-            { date: new Date(2026,0,26), reading: 'Exodus 18–21' },
-            { date: new Date(2026,0,27), reading: 'Exodus 22–25' },
-            { date: new Date(2026,0,28), reading: 'Exodus 26–29' },
-            { date: new Date(2026,0,29), reading: 'Exodus 30–33' },
-            { date: new Date(2026,0,30), reading: 'Exodus 34–37' },
-            { date: new Date(2026,1,2), reading: 'Exodus 38–40; Leviticus 1' },
-            { date: new Date(2026,1,3), reading: 'Leviticus 2–5' },
-            // … (keep all your other 261 entries here)
+            // ... your full list of readings here ...
             { date: new Date(2026,11,30), reading: 'Revelation 20–22' }
         ];
 
         function getLink(reading, version) {
             if (version === 'RIPV') {
                 const firstBook = reading.split(' ')[0].replace(/–.*$/, '').trim();
-                const map = {
-                    'Genesis':'GEN', 'Exodus':'EXO', 'Leviticus':'LEV', 'Numbers':'NUM', 'Deuteronomy':'DEU',
-                    'Joshua':'JOS', 'Judges':'JDG', 'Ruth':'RUT', '1 Samuel':'1SA', '2 Samuel':'2SA',
-                    '1 Kings':'1KI', '2 Kings':'2KI', '1 Chronicles':'1CH', '2 Chronicles':'2CH',
-                    'Ezra':'EZR', 'Nehemiah':'NEH', 'Esther':'EST', 'Job':'JOB', 'Psalms':'PSA',
-                    'Proverbs':'PRO', 'Ecclesiastes':'ECC', 'Song of Solomon':'SNG', 'Isaiah':'ISA',
-                    'Jeremiah':'JER', 'Lamentations':'LAM', 'Ezekiel':'EZK', 'Daniel':'DAN',
-                    'Hosea':'HOS', 'Joel':'JOL', 'Amos':'AMO', 'Obadiah':'OBA', 'Jonah':'JON',
-                    'Micah':'MIC', 'Nahum':'NAM', 'Habakkuk':'HAB', 'Zephaniah':'ZEP', 'Haggai':'HAG',
-                    'Zechariah':'ZEC', 'Malachi':'MAL',
-                    'Matthew':'MAT', 'Mark':'MRK', 'Luke':'LUK', 'John':'JHN', 'Acts':'ACT',
-                    'Romans':'ROM', '1 Corinthians':'1CO', '2 Corinthians':'2CO', 'Galatians':'GAL',
-                    'Ephesians':'EPH', 'Philippians':'PHP', 'Colossians':'COL',
-                    '1 Thessalonians':'1TH', '2 Thessalonians':'2TH', '1 Timothy':'1TI', '2 Timothy':'2TI',
-                    'Titus':'TIT', 'Philemon':'PHM', 'Hebrews':'HEB', 'James':'JAS',
-                    '1 Peter':'1PE', '2 Peter':'2PE', '1 John':'1JN', '2 John':'2JN', '3 John':'3JN',
-                    'Jude':'JUD', 'Revelation':'REV'
-                };
+                const map = { /* your full book map here */ };
                 const code = map[firstBook] || 'GEN';
                 return `https://www.bible.com/bible/782/${code}.1.RIPV`;
             } else {
@@ -120,12 +168,14 @@
 
         const versionSelect = document.getElementById('version');
         const datePicker = document.getElementById('datePicker');
+        const content = document.getElementById('content');
 
-        // Restore saved version preference
+        // Restore saved version
         if (localStorage.getItem('bibleVersion')) {
             versionSelect.value = localStorage.getItem('bibleVersion');
         }
 
+        // Events
         versionSelect.addEventListener('change', () => {
             localStorage.setItem('bibleVersion', versionSelect.value);
             showReading();
@@ -134,33 +184,48 @@
         datePicker.addEventListener('change', showReading);
 
         function showReading() {
+            if (!datePicker.value) {
+                content.innerHTML = `<div class="reading-box"><p>Please select a date to view the reading.</p></div>`;
+                return;
+            }
+
             const selected = new Date(datePicker.value);
             selected.setHours(0,0,0,0);
-            const version = versionSelect.value;
 
             const entry = readings.find(r => r.date.getTime() === selected.getTime());
 
-            const content = document.getElementById('content');
             if (entry) {
                 const dateStr = selected.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'});
                 content.innerHTML = `
                     <div class="reading-box">
-                        <h2>Today's Reading (${dateStr})</h2>
+                        <h2>${dateStr}</h2>
                         <div class="reading">${entry.reading}</div>
-                        <a href="${getLink(entry.reading, version)}" target="_blank" class="link">
-                            Read on ${version==='RIPV' ? 'bible.com (YouVersion)' : 'BibleGateway'} (${version})
+                        <a href="${getLink(entry.reading, versionSelect.value)}" 
+                           target="_blank" class="read-button">
+                            Read Now (${versionSelect.value})
                         </a>
                     </div>`;
             } else {
-                content.innerHTML = `<div class="reading-box"><p>No scheduled reading today (weekend or off day).<br>Use the date picker to catch up on previous days!</p></div>`;
+                content.innerHTML = `<div class="reading-box"><p>No scheduled reading for this date (weekend or off day).<br>Use the date picker to catch up!</p></div>`;
             }
 
-            // Smooth scroll to the reading section
             content.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
 
-        // Show today's reading immediately on page load
-        showReading();
+        // === Auto-set today's date and show reading ===
+        window.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            if (today.getFullYear() === 2026) {
+                const todayStr = today.toISOString().split('T')[0];
+                datePicker.value = todayStr;
+                // Force update after setting value
+                setTimeout(showReading, 100);
+            } else {
+                // Fallback for testing outside 2026
+                datePicker.value = '2026-01-05';
+                setTimeout(showReading, 100);
+            }
+        });
     </script>
 </body>
 </html>

@@ -7,225 +7,483 @@
     <style>
         :root {
             --primary: #2c3e50;
-            --light-bg: #f5f5f5;
-            --card-bg: #ffffff;
+            --light: #f5f5f5;
+            --card: #ffffff;
             --reading-bg: #e8f4fc;
+            --today: #27ae60;
+            --other: #e67e22;
         }
-
         * { box-sizing: border-box; }
-
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            margin: 0;
-            background: var(--light-bg);
-            color: #333;
-            line-height: 1.5;
+            margin: 0; background: var(--light); color: #333; line-height: 1.6;
         }
-
         .container {
-            max-width: 900px;
-            margin: clamp(1rem, 4vw, 2.5rem) auto;
-            padding: clamp(1rem, 5vw, 2rem);
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.08);
+            max-width: 920px; margin: clamp(1rem, 4vw, 2.5rem) auto;
+            padding: clamp(1rem, 5vw, 2.5rem); background: var(--card);
+            border-radius: 16px; box-shadow: 0 6px 30px rgba(0,0,0,0.1);
         }
-
         .header { text-align: center; margin-bottom: 2rem; }
-
-        .logo {
-            width: clamp(100px, 25vw, 140px);
-            height: clamp(100px, 25vw, 140px);
-            background: #e0e0e0;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            border: 4px solid var(--primary);
-            overflow: hidden;
-        }
-
-        .church-name { font-size: clamp(1.4rem, 5vw, 2.1rem); font-weight: bold; color: var(--primary); margin: 0.5rem 0; }
-        h1 { margin: 0.5rem 0; font-size: clamp(1.8rem, 6vw, 2.4rem); color: var(--primary); }
-        .tagline { font-style: italic; color: #555; font-size: clamp(0.95rem, 3.5vw, 1.1rem); }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1.4rem;
-            margin: 2rem 0;
-        }
-
+        .logo { width: clamp(110px, 28vw, 150px); height: clamp(110px, 28vw, 150px);
+                border-radius: 50%; margin: 0 auto 1rem; border: 5px solid var(--primary); overflow: hidden; }
+        h1 { font-size: clamp(1.9rem, 6.5vw, 2.6rem); color: var(--primary); margin: 0.4rem 0; }
+        .church-name { font-size: clamp(1.5rem, 5.5vw, 2.2rem); font-weight: bold; color: var(--primary); }
+        .tagline { color: #555; font-style: italic; font-size: clamp(1rem, 3.8vw, 1.15rem); }
+        .controls { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; margin: 2rem 0; }
+        .date-row { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: center; }
         select, input[type="date"] {
-            width: 100%;
-            max-width: 340px;
-            padding: 0.9rem 1rem;
-            font-size: 1.1rem;
-            border-radius: 10px;
-            border: 1px solid #ccc;
+            padding: 0.9rem 1.2rem; font-size: 1.1rem; border-radius: 10px;
+            border: 1px solid #ccc; min-width: 220px;
         }
-
+        button.reset-today {
+            padding: 0.8rem 1.4rem; background: var(--today); color: white;
+            border: none; border-radius: 10px; font-size: 1rem; font-weight: 600; cursor: pointer;
+        }
+        button.reset-today:hover { background: #219653; }
+        .status { font-size: 1.1rem; font-weight: 500; margin: 0.8rem 0 1.5rem; text-align: center; }
+        .status.today { color: var(--today); }
+        .status.other { color: var(--other); }
         .reading-box {
-            background: var(--reading-bg);
-            padding: clamp(1.5rem, 6vw, 2.5rem);
-            border-radius: 16px;
-            margin: 1.5rem 0;
-            text-align: center;
+            background: var(--reading-bg); padding: clamp(1.6rem, 6vw, 2.8rem);
+            border-radius: 16px; text-align: center;
         }
-
-        .reading {
-            font-size: clamp(1.4rem, 6.5vw, 2.1rem);
-            font-weight: bold;
-            line-height: 1.35;
-            margin: 1rem 0;
-            color: #1a3c5e;
-        }
-
+        .reading-box h2 { margin: 0 0 1.2rem; font-size: clamp(1.4rem, 5vw, 1.8rem); color: var(--primary); }
+        .reading { font-size: clamp(1.5rem, 7vw, 2.2rem); font-weight: bold; line-height: 1.35; margin: 1rem 0; color: #1a3c5e; }
         .read-button {
-            display: inline-block;
-            margin-top: 1.2rem;
-            padding: 0.9rem 1.8rem;
-            background: var(--primary);
-            color: white;
-            font-size: 1.15rem;
-            font-weight: 600;
-            border-radius: 12px;
-            text-decoration: none;
-            transition: background 0.2s;
+            display: inline-block; margin-top: 1.4rem; padding: 1rem 2rem;
+            background: var(--primary); color: white !important; font-size: 1.2rem; font-weight: 600;
+            border-radius: 12px; text-decoration: none; transition: all 0.2s;
         }
-
-        .read-button:hover { background: #1e2e3f; }
-
-        .note {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: 2.5rem;
-        }
-
+        .read-button:hover { background: #1e2e3f; transform: translateY(-2px); }
+        .note { text-align: center; font-size: 0.95rem; color: #555; margin-top: 3rem; line-height: 1.6; }
         @media (max-width: 480px) {
             .container { margin: 0.8rem; border-radius: 12px; }
-            .reading { font-size: clamp(1.35rem, 7vw, 1.9rem); }
+            .reading { font-size: clamp(1.45rem, 7.5vw, 2rem); }
+            .date-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <div class="header">
-            <div class="logo">
-                <img src="FEMC-logo.png" alt="FEMC Logo" style="width:100%; height:100%; object-fit:contain;">
+<div class="container">
+    <div class="header">
+        <div class="logo">
+            <img src="FEMC-logo.png" alt="FEMC Logo" style="width:100%; height:100%; object-fit:contain;">
+        </div>
+        <div class="church-name">FILIPINO EVANGELICAL METHODIST CHURCH</div>
+        <h1>RESUME Bible Reading Plan 2026</h1>
+        <div class="tagline">Relaxed • Enjoyable • Sustainable • Meaningful • Unhurried<br>Finish the Bible by Dec 30, 2026 — 5 days/week (Mon–Fri)</div>
+    </div>
+    <div class="controls">
+        <div><strong>Bible Version:</strong></div>
+        <select id="version">
+            <option value="NIV">NIV (English)</option>
+            <option value="KJV">KJV (English)</option>
+            <option value="ESV">ESV (English)</option>
+            <option value="NLT">NLT (English)</option>
+            <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
+            <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
+        </select>
+        <div class="date-row">
+            <div>
+                <label for="datePicker">Select any date (catch-up / preview):</label><br>
+                <input type="date" id="datePicker" min="2026-01-01" max="2026-12-30">
             </div>
-            <div class="church-name">FILIPINO EVANGELICAL METHODIST CHURCH</div>
-            <h1>RESUME Bible Reading Plan 2026</h1>
-            <div class="tagline">Relaxed • Enjoyable • Sustainable • Meaningful • Unhurried<br>5 days/week (Mon–Fri), weekends off</div>
-        </div>
-
-        <div class="controls">
-            <div><strong>Bible Version:</strong></div>
-            <select id="version">
-                <option value="NIV">NIV (English)</option>
-                <option value="KJV">KJV (English)</option>
-                <option value="ESV">ESV (English)</option>
-                <option value="NLT">NLT (English)</option>
-                <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
-                <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
-            </select>
-
-            <label for="datePicker">Select any day (for catch-up):</label>
-            <input type="date" id="datePicker" min="2026-01-01" max="2026-12-31">
-        </div>
-
-        <div id="content">
-            <!-- Reading will appear here -->
-        </div>
-
-        <div class="note">
-            English & Tagalog → BibleGateway.com<br>
-            Ilocano → bible.com (YouVersion)
+            <button class="reset-today" type="button">Reset to Today</button>
         </div>
     </div>
+    <div id="status" class="status"></div>
+    <div id="content" class="reading-box"></div>
+    <div class="note">
+        English & Tagalog → BibleGateway.com<br>
+        Ilocano → bible.com (YouVersion)<br>
+        <strong>Plan finishes: Revelation 19–22 on December 30, 2026</strong>
+    </div>
+</div>
+<script>
+    const readings2026 = [
+  { date: new Date(2026, 0, 1), reading: "Genesis 1–4" },
+  { date: new Date(2026, 0, 2), reading: "Genesis 5–8" },
+  { date: new Date(2026, 0, 5), reading: "Genesis 9–12" },
+  { date: new Date(2026, 0, 6), reading: "Genesis 13–16" },
+  { date: new Date(2026, 0, 7), reading: "Genesis 17–20" },
+  { date: new Date(2026, 0, 8), reading: "Genesis 21–24" },
+  { date: new Date(2026, 0, 9), reading: "Genesis 25–28" },
+  { date: new Date(2026, 0, 12), reading: "Genesis 29–32" },
+  { date: new Date(2026, 0, 13), reading: "Genesis 33–36" },
+  { date: new Date(2026, 0, 14), reading: "Genesis 37–40" },
+  { date: new Date(2026, 0, 15), reading: "Genesis 41–44" },
+  { date: new Date(2026, 0, 16), reading: "Genesis 45–50" },
+  { date: new Date(2026, 0, 19), reading: "Exodus 1–4" },
+  { date: new Date(2026, 0, 20), reading: "Exodus 5–9" },
+  { date: new Date(2026, 0, 21), reading: "Exodus 10–13" },
+  { date: new Date(2026, 0, 22), reading: "Exodus 14–18" },
+  { date: new Date(2026, 0, 23), reading: "Exodus 19–22" },
+  { date: new Date(2026, 0, 26), reading: "Exodus 23–27" },
+  { date: new Date(2026, 0, 27), reading: "Exodus 28–31" },
+  { date: new Date(2026, 0, 28), reading: "Exodus 32–35" },
+  { date: new Date(2026, 0, 29), reading: "Exodus 36–40" },
+  { date: new Date(2026, 0, 30), reading: "Leviticus 1–4" },
+  { date: new Date(2026, 1, 2), reading: "Leviticus 5–8" },
+  { date: new Date(2026, 1, 3), reading: "Leviticus 9–12" },
+  { date: new Date(2026, 1, 4), reading: "Leviticus 13–16" },
+  { date: new Date(2026, 1, 5), reading: "Leviticus 17–20" },
+  { date: new Date(2026, 1, 6), reading: "Leviticus 21–24" },
+  { date: new Date(2026, 1, 9), reading: "Leviticus 25–27" },
+  { date: new Date(2026, 1, 10), reading: "Numbers 1–4" },
+  { date: new Date(2026, 1, 11), reading: "Numbers 5–8" },
+  { date: new Date(2026, 1, 12), reading: "Numbers 9–12" },
+  { date: new Date(2026, 1, 13), reading: "Numbers 13–16" },
+  { date: new Date(2026, 1, 16), reading: "Numbers 17–20" },
+  { date: new Date(2026, 1, 17), reading: "Numbers 21–24" },
+  { date: new Date(2026, 1, 18), reading: "Numbers 25–28" },
+  { date: new Date(2026, 1, 19), reading: "Numbers 29–32" },
+  { date: new Date(2026, 1, 20), reading: "Numbers 33–36" },
+  { date: new Date(2026, 1, 23), reading: "Deuteronomy 1–4" },
+  { date: new Date(2026, 1, 24), reading: "Deuteronomy 5–9" },
+  { date: new Date(2026, 1, 25), reading: "Deuteronomy 10–14" },
+  { date: new Date(2026, 1, 26), reading: "Deuteronomy 15–19" },
+  { date: new Date(2026, 1, 27), reading: "Deuteronomy 20–24" },
+  { date: new Date(2026, 2, 2), reading: "Deuteronomy 25–28" },
+  { date: new Date(2026, 2, 3), reading: "Deuteronomy 29–34" },
+  { date: new Date(2026, 2, 4), reading: "Joshua 1–5" },
+  { date: new Date(2026, 2, 5), reading: "Joshua 6–10" },
+  { date: new Date(2026, 2, 6), reading: "Joshua 11–15" },
+  { date: new Date(2026, 2, 9), reading: "Joshua 16–20" },
+  { date: new Date(2026, 2, 10), reading: "Joshua 21–24" },
+  { date: new Date(2026, 2, 11), reading: "Judges 1–5" },
+  { date: new Date(2026, 2, 12), reading: "Judges 6–9" },
+  { date: new Date(2026, 2, 13), reading: "Judges 10–13" },
+  { date: new Date(2026, 2, 16), reading: "Judges 14–18" },
+  { date: new Date(2026, 2, 17), reading: "Judges 19–21; Ruth 1–2" },
+  { date: new Date(2026, 2, 18), reading: "Ruth 3–4; 1 Samuel 1–4" },
+  { date: new Date(2026, 2, 19), reading: "1 Samuel 5–9" },
+  { date: new Date(2026, 2, 20), reading: "1 Samuel 10–14" },
+  { date: new Date(2026, 2, 23), reading: "1 Samuel 15–18" },
+  { date: new Date(2026, 2, 24), reading: "1 Samuel 19–23" },
+  { date: new Date(2026, 2, 25), reading: "1 Samuel 24–28" },
+  { date: new Date(2026, 2, 26), reading: "1 Samuel 29–31; 2 Samuel 1–3" },
+  { date: new Date(2026, 2, 27), reading: "2 Samuel 4–8" },
+  { date: new Date(2026, 2, 30), reading: "2 Samuel 9–13" },
+  { date: new Date(2026, 2, 31), reading: "2 Samuel 14–18" },
+  { date: new Date(2026, 3, 1), reading: "2 Samuel 19–23" },
+  { date: new Date(2026, 3, 2), reading: "2 Samuel 24; 1 Kings 1–3" },
+  { date: new Date(2026, 3, 3), reading: "1 Kings 4–8" },
+  { date: new Date(2026, 3, 6), reading: "1 Kings 9–12" },
+  { date: new Date(2026, 3, 7), reading: "1 Kings 13–16" },
+  { date: new Date(2026, 3, 8), reading: "1 Kings 17–20" },
+  { date: new Date(2026, 3, 9), reading: "1 Kings 21–22; 2 Kings 1–2" },
+  { date: new Date(2026, 3, 10), reading: "2 Kings 3–7" },
+  { date: new Date(2026, 3, 13), reading: "2 Kings 8–11" },
+  { date: new Date(2026, 3, 14), reading: "2 Kings 12–15" },
+  { date: new Date(2026, 3, 15), reading: "2 Kings 16–19" },
+  { date: new Date(2026, 3, 16), reading: "2 Kings 20–23" },
+  { date: new Date(2026, 3, 17), reading: "2 Kings 24–25; 1 Chronicles 1–3" },
+  { date: new Date(2026, 3, 20), reading: "1 Chronicles 4–8" },
+  { date: new Date(2026, 3, 21), reading: "1 Chronicles 9–12" },
+  { date: new Date(2026, 3, 22), reading: "1 Chronicles 13–17" },
+  { date: new Date(2026, 3, 23), reading: "1 Chronicles 18–22" },
+  { date: new Date(2026, 3, 24), reading: "1 Chronicles 23–27" },
+  { date: new Date(2026, 3, 27), reading: "1 Chronicles 28–29; 2 Chronicles 1–4" },
+  { date: new Date(2026, 3, 28), reading: "2 Chronicles 5–9" },
+  { date: new Date(2026, 3, 29), reading: "2 Chronicles 10–14" },
+  { date: new Date(2026, 3, 30), reading: "2 Chronicles 15–19" },
+  { date: new Date(2026, 4, 1), reading: "2 Chronicles 20–24" },
+  { date: new Date(2026, 4, 4), reading: "2 Chronicles 25–28" },
+  { date: new Date(2026, 4, 5), reading: "2 Chronicles 29–32" },
+  { date: new Date(2026, 4, 6), reading: "2 Chronicles 33–36" },
+  { date: new Date(2026, 4, 7), reading: "Ezra 1–5" },
+  { date: new Date(2026, 4, 8), reading: "Ezra 6–10" },
+  { date: new Date(2026, 4, 11), reading: "Nehemiah 1–5" },
+  { date: new Date(2026, 4, 12), reading: "Nehemiah 6–9" },
+  { date: new Date(2026, 4, 13), reading: "Nehemiah 10–13" },
+  { date: new Date(2026, 4, 14), reading: "Esther 1–5" },
+  { date: new Date(2026, 4, 15), reading: "Esther 6–10" },
+  { date: new Date(2026, 4, 18), reading: "Job 1–5" },
+  { date: new Date(2026, 4, 19), reading: "Job 6–10" },
+  { date: new Date(2026, 4, 20), reading: "Job 11–15" },
+  { date: new Date(2026, 4, 21), reading: "Job 16–20" },
+  { date: new Date(2026, 4, 22), reading: "Job 21–25" },
+  { date: new Date(2026, 4, 25), reading: "Job 26–31" },
+  { date: new Date(2026, 4, 26), reading: "Job 32–36" },
+  { date: new Date(2026, 4, 27), reading: "Job 37–42" },
+  { date: new Date(2026, 4, 28), reading: "Psalms 1–7" },
+  { date: new Date(2026, 4, 29), reading: "Psalms 8–14" },
+  { date: new Date(2026, 5, 1), reading: "Psalms 15–21" },
+  { date: new Date(2026, 5, 2), reading: "Psalms 22–28" },
+  { date: new Date(2026, 5, 3), reading: "Psalms 29–35" },
+  { date: new Date(2026, 5, 4), reading: "Psalms 36–41" },
+  { date: new Date(2026, 5, 5), reading: "Psalms 42–48" },
+  { date: new Date(2026, 5, 8), reading: "Psalms 49–55" },
+  { date: new Date(2026, 5, 9), reading: "Psalms 56–62" },
+  { date: new Date(2026, 5, 10), reading: "Psalms 63–69" },
+  { date: new Date(2026, 5, 11), reading: "Psalms 70–76" },
+  { date: new Date(2026, 5, 12), reading: "Psalms 77–83" },
+  { date: new Date(2026, 5, 15), reading: "Psalms 84–89" },
+  { date: new Date(2026, 5, 16), reading: "Psalms 90–96" },
+  { date: new Date(2026, 5, 17), reading: "Psalms 97–103" },
+  { date: new Date(2026, 5, 18), reading: "Psalms 104–109" },
+  { date: new Date(2026, 5, 19), reading: "Psalms 110–116" },
+  { date: new Date(2026, 5, 22), reading: "Psalms 117–118; Psalm 119:1–40" },
+  { date: new Date(2026, 5, 23), reading: "Psalm 119:41–88" },
+  { date: new Date(2026, 5, 24), reading: "Psalm 119:89–136" },
+  { date: new Date(2026, 5, 25), reading: "Psalm 119:137–176" },
+  { date: new Date(2026, 5, 26), reading: "Psalms 120–134" },
+  { date: new Date(2026, 5, 29), reading: "Psalms 135–141" },
+  { date: new Date(2026, 5, 30), reading: "Psalms 142–150" },
+  { date: new Date(2026, 6, 1), reading: "Proverbs 1–5" },
+  { date: new Date(2026, 6, 2), reading: "Proverbs 6–10" },
+  { date: new Date(2026, 6, 3), reading: "Proverbs 11–15" },
+  { date: new Date(2026, 6, 6), reading: "Proverbs 16–19" },
+  { date: new Date(2026, 6, 7), reading: "Proverbs 20–23" },
+  { date: new Date(2026, 6, 8), reading: "Proverbs 24–27" },
+  { date: new Date(2026, 6, 9), reading: "Proverbs 28–31" },
+  { date: new Date(2026, 6, 10), reading: "Ecclesiastes 1–6" },
+  { date: new Date(2026, 6, 13), reading: "Ecclesiastes 7–12" },
+  { date: new Date(2026, 6, 14), reading: "Song of Solomon 1–8" },
+  { date: new Date(2026, 6, 15), reading: "Isaiah 1–5" },
+  { date: new Date(2026, 6, 16), reading: "Isaiah 6–10" },
+  { date: new Date(2026, 6, 17), reading: "Isaiah 11–15" },
+  { date: new Date(2026, 6, 20), reading: "Isaiah 16–20" },
+  { date: new Date(2026, 6, 21), reading: "Isaiah 21–25" },
+  { date: new Date(2026, 6, 22), reading: "Isaiah 26–30" },
+  { date: new Date(2026, 6, 23), reading: "Isaiah 31–35" },
+  { date: new Date(2026, 6, 24), reading: "Isaiah 36–40" },
+  { date: new Date(2026, 6, 27), reading: "Isaiah 41–44" },
+  { date: new Date(2026, 6, 28), reading: "Isaiah 45–49" },
+  { date: new Date(2026, 6, 29), reading: "Isaiah 50–54" },
+  { date: new Date(2026, 6, 30), reading: "Isaiah 55–59" },
+  { date: new Date(2026, 6, 31), reading: "Isaiah 60–64" },
+  { date: new Date(2026, 7, 3), reading: "Isaiah 65–66; Jeremiah 1–3" },
+  { date: new Date(2026, 7, 4), reading: "Jeremiah 4–7" },
+  { date: new Date(2026, 7, 5), reading: "Jeremiah 8–11" },
+  { date: new Date(2026, 7, 6), reading: "Jeremiah 12–15" },
+  { date: new Date(2026, 7, 7), reading: "Jeremiah 16–19" },
+  { date: new Date(2026, 7, 10), reading: "Jeremiah 20–23" },
+  { date: new Date(2026, 7, 11), reading: "Jeremiah 24–27" },
+  { date: new Date(2026, 7, 12), reading: "Jeremiah 28–31" },
+  { date: new Date(2026, 7, 13), reading: "Jeremiah 32–35" },
+  { date: new Date(2026, 7, 14), reading: "Jeremiah 36–39" },
+  { date: new Date(2026, 7, 17), reading: "Jeremiah 40–43" },
+  { date: new Date(2026, 7, 18), reading: "Jeremiah 44–47" },
+  { date: new Date(2026, 7, 19), reading: "Jeremiah 48–51" },
+  { date: new Date(2026, 7, 20), reading: "Jeremiah 52; Lamentations 1–3" },
+  { date: new Date(2026, 7, 21), reading: "Lamentations 4–5; Ezekiel 1–4" },
+  { date: new Date(2026, 7, 24), reading: "Ezekiel 5–9" },
+  { date: new Date(2026, 7, 25), reading: "Ezekiel 10–14" },
+  { date: new Date(2026, 7, 26), reading: "Ezekiel 15–19" },
+  { date: new Date(2026, 7, 27), reading: "Ezekiel 20–23" },
+  { date: new Date(2026, 7, 28), reading: "Ezekiel 24–27" },
+  { date: new Date(2026, 7, 31), reading: "Ezekiel 28–31" },
+  { date: new Date(2026, 8, 1), reading: "Ezekiel 32–35" },
+  { date: new Date(2026, 8, 2), reading: "Ezekiel 36–39" },
+  { date: new Date(2026, 8, 3), reading: "Ezekiel 40–43" },
+  { date: new Date(2026, 8, 4), reading: "Ezekiel 44–48" },
+  { date: new Date(2026, 8, 7), reading: "Daniel 1–4" },
+  { date: new Date(2026, 8, 8), reading: "Daniel 5–8" },
+  { date: new Date(2026, 8, 9), reading: "Daniel 9–12" },
+  { date: new Date(2026, 8, 10), reading: "Hosea 1–7" },
+  { date: new Date(2026, 8, 11), reading: "Hosea 8–14" },
+  { date: new Date(2026, 8, 14), reading: "Joel 1–3; Amos 1–4" },
+  { date: new Date(2026, 8, 15), reading: "Amos 5–9" },
+  { date: new Date(2026, 8, 16), reading: "Obadiah; Jonah 1–4" },
+  { date: new Date(2026, 8, 17), reading: "Micah 1–5" },
+  { date: new Date(2026, 8, 18), reading: "Micah 6–7; Nahum 1–3" },
+  { date: new Date(2026, 8, 21), reading: "Habakkuk 1–3; Zephaniah 1–3" },
+  { date: new Date(2026, 8, 22), reading: "Haggai 1–2; Zechariah 1–5" },
+  { date: new Date(2026, 8, 23), reading: "Zechariah 6–10" },
+  { date: new Date(2026, 8, 24), reading: "Zechariah 11–14" },
+  { date: new Date(2026, 8, 25), reading: "Malachi 1–4; Matthew 1–4" },
+  { date: new Date(2026, 8, 28), reading: "Matthew 5–8" },
+  { date: new Date(2026, 8, 29), reading: "Matthew 9–12" },
+  { date: new Date(2026, 8, 30), reading: "Matthew 13–16" },
+  { date: new Date(2026, 9, 1), reading: "Matthew 17–20" },
+  { date: new Date(2026, 9, 2), reading: "Matthew 21–24" },
+  { date: new Date(2026, 9, 5), reading: "Matthew 25–28" },
+  { date: new Date(2026, 9, 6), reading: "Mark 1–5" },
+  { date: new Date(2026, 9, 7), reading: "Mark 6–9" },
+  { date: new Date(2026, 9, 8), reading: "Mark 10–13" },
+  { date: new Date(2026, 9, 9), reading: "Mark 14–16" },
+  { date: new Date(2026, 9, 12), reading: "Luke 1–4" },
+  { date: new Date(2026, 9, 13), reading: "Luke 5–8" },
+  { date: new Date(2026, 9, 14), reading: "Luke 9–12" },
+  { date: new Date(2026, 9, 15), reading: "Luke 13–16" },
+  { date: new Date(2026, 9, 16), reading: "Luke 17–20" },
+  { date: new Date(2026, 9, 19), reading: "Luke 21–24" },
+  { date: new Date(2026, 9, 20), reading: "John 1–4" },
+  { date: new Date(2026, 9, 21), reading: "John 5–8" },
+  { date: new Date(2026, 9, 22), reading: "John 9–12" },
+  { date: new Date(2026, 9, 23), reading: "John 13–16" },
+  { date: new Date(2026, 9, 26), reading: "John 17–21" },
+  { date: new Date(2026, 9, 27), reading: "Acts 1–5" },
+  { date: new Date(2026, 9, 28), reading: "Acts 6–10" },
+  { date: new Date(2026, 9, 29), reading: "Acts 11–15" },
+  { date: new Date(2026, 9, 30), reading: "Acts 16–20" },
+  { date: new Date(2026, 10, 2), reading: "Acts 21–25" },
+  { date: new Date(2026, 10, 3), reading: "Acts 26–28" },
+  { date: new Date(2026, 10, 4), reading: "Romans 1–5" },
+  { date: new Date(2026, 10, 5), reading: "Romans 6–10" },
+  { date: new Date(2026, 10, 6), reading: "Romans 11–16" },
+  { date: new Date(2026, 10, 9), reading: "1 Corinthians 1–5" },
+  { date: new Date(2026, 10, 10), reading: "1 Corinthians 6–10" },
+  { date: new Date(2026, 10, 11), reading: "1 Corinthians 11–16" },
+  { date: new Date(2026, 10, 12), reading: "2 Corinthians 1–6" },
+  { date: new Date(2026, 10, 13), reading: "2 Corinthians 7–13" },
+  { date: new Date(2026, 10, 16), reading: "Galatians 1–6" },
+  { date: new Date(2026, 10, 17), reading: "Ephesians 1–6" },
+  { date: new Date(2026, 10, 18), reading: "Philippians 1–4" },
+  { date: new Date(2026, 10, 19), reading: "Colossians 1–4" },
+  { date: new Date(2026, 10, 20), reading: "1 Thessalonians 1–5; 2 Thessalonians 1–3" },
+  { date: new Date(2026, 10, 23), reading: "1 Timothy 1–6" },
+  { date: new Date(2026, 10, 24), reading: "2 Timothy 1–4" },
+  { date: new Date(2026, 10, 25), reading: "Titus 1–3; Philemon" },
+  { date: new Date(2026, 10, 26), reading: "Hebrews 1–5" },
+  { date: new Date(2026, 10, 27), reading: "Hebrews 6–10" },
+  { date: new Date(2026, 10, 30), reading: "Hebrews 11–13" },
+  { date: new Date(2026, 11, 1), reading: "James 1–5" },
+  { date: new Date(2026, 11, 2), reading: "1 Peter 1–5" },
+  { date: new Date(2026, 11, 3), reading: "2 Peter 1–3" },
+  { date: new Date(2026, 11, 4), reading: "1 John 1–5" },
+  { date: new Date(2026, 11, 7), reading: "2 John; 3 John; Jude" },
+  { date: new Date(2026, 11, 8), reading: "Revelation 1–4" },
+  { date: new Date(2026, 11, 9), reading: "Revelation 5–9" },
+  { date: new Date(2026, 11, 10), reading: "Revelation 10–14" },
+  { date: new Date(2026, 11, 11), reading: "Revelation 15–18" },
+  { date: new Date(2026, 11, 14), reading: "Revelation 19–22" },
+  { date: new Date(2026, 11, 15), reading: "Psalm 23; Psalm 46; Psalm 91" },
+  { date: new Date(2026, 11, 16), reading: "Proverbs 3; Proverbs 4" },
+  { date: new Date(2026, 11, 17), reading: "Matthew 5–7 (Sermon on the Mount)" },
+  { date: new Date(2026, 11, 18), reading: "Luke 15 (Lost Sheep, Coin, Son)" },
+  { date: new Date(2026, 11, 21), reading: "Isaiah 53; Isaiah 55" },
+  { date: new Date(2026, 11, 22), reading: "Romans 8" },
+  { date: new Date(2026, 11, 23), reading: "1 Corinthians 13" },
+  { date: new Date(2026, 11, 24), reading: "Philippians 2–4" },
+  { date: new Date(2026, 11, 25), reading: "Hebrews 11" },
+  { date: new Date(2026, 11, 28), reading: "Psalm 119 (selected stanzas)" },
+  { date: new Date(2026, 11, 29), reading: "John 14–17" },
+  { date: new Date(2026, 11, 30), reading: "Revelation 21–22" },
+  { date: new Date(2026, 12, 1), reading: "Deuteronomy 7:9; Lamentations 3:22–23" },
+  { date: new Date(2026, 12, 2), reading: "John 1:1–14" },
+  { date: new Date(2026, 12, 5), reading: "Matthew 28:18–20" },
+  { date: new Date(2026, 12, 6), reading: "Ephesians 6:10–18" },
+  { date: new Date(2026, 12, 7), reading: "Galatians 5:22–23" },
+  { date: new Date(2026, 12, 8), reading: "1 Corinthians 13" },
+  { date: new Date(2026, 12, 9), reading: "Psalm 1" },
+  { date: new Date(2026, 12, 12), reading: "Matthew 6:9–13" },
+  { date: new Date(2026, 12, 13), reading: "Matthew 5:3–12" },
+  { date: new Date(2026, 12, 14), reading: "Ephesians 2:8–9" },
+  { date: new Date(2026, 12, 15), reading: "John 15:1–11" },
+  { date: new Date(2026, 12, 16), reading: "2 Timothy 3:16–17" },
+  { date: new Date(2026, 12, 19), reading: "Congratulations! Bible completed in 2026!" },
+  { date: new Date(2026, 12, 20), reading: "Psalm 100" },
+  { date: new Date(2026, 12, 21), reading: "Psalm 150" },
+  { date: new Date(2026, 12, 22), reading: "Romans 15:13" },
+  { date: new Date(2026, 12, 23), reading: "Philippians 4:4–7" },
+  { date: new Date(2026, 12, 26), reading: "Isaiah 9:6; John 14:27" },
+  { date: new Date(2026, 12, 27), reading: "1 John 4:7–12" },
+  { date: new Date(2026, 12, 28), reading: "1 Corinthians 15:57; Revelation 21:4" },
+  { date: new Date(2026, 12, 29), reading: "Joshua 24:15" },
+  { date: new Date(2026, 12, 30), reading: "Revelation 21–22 (Victory & New Creation)" }
+];
 
-    <script>
-        const readings = [
-            { date: new Date(2026,0,1), reading: 'Genesis 1–4' },
-            { date: new Date(2026,0,2), reading: 'Genesis 5–8' },
-            { date: new Date(2026,0,5), reading: 'Genesis 9–12' },
-            // ... your full list of readings here ...
-            { date: new Date(2026,11,30), reading: 'Revelation 20–22' }
-        ];
+    function getLink(reading, version) {
+        if (version === 'RIPV') {
+            const firstBook = reading.split(' ')[0].replace(/–.*$/, '').replace(/:.*/, '').trim();
+            const map = {
+                'Genesis':'GEN','Exodus':'EXO','Leviticus':'LEV','Numbers':'NUM','Deuteronomy':'DEU',
+                'Joshua':'JOS','Judges':'JDG','Ruth':'RUT','1 Samuel':'1SA','2 Samuel':'2SA',
+                '1 Kings':'1KI','2 Kings':'2KI','1 Chronicles':'1CH','2 Chronicles':'2CH',
+                'Ezra':'EZR','Nehemiah':'NEH','Esther':'EST','Job':'JOB','Psalms':'PSA','Psalm':'PSA',
+                'Proverbs':'PRO','Ecclesiastes':'ECC','Song of Solomon':'SNG','Isaiah':'ISA',
+                'Jeremiah':'JER','Lamentations':'LAM','Ezekiel':'EZK','Daniel':'DAN',
+                'Hosea':'HOS','Joel':'JOL','Amos':'AMO','Obadiah':'OBA','Jonah':'JON',
+                'Micah':'MIC','Nahum':'NAM','Habakkuk':'HAB','Zephaniah':'ZEP','Haggai':'HAG',
+                'Zechariah':'ZEC','Malachi':'MAL','Matthew':'MAT','Mark':'MRK','Luke':'LUK',
+                'John':'JHN','Acts':'ACT','Romans':'ROM','1 Corinthians':'1CO','2 Corinthians':'2CO',
+                'Galatians':'GAL','Ephesians':'EPH','Philippians':'PHP','Colossians':'COL',
+                '1 Thessalonians':'1TH','2 Thessalonians':'2TH','1 Timothy':'1TI','2 Timothy':'2TI',
+                'Titus':'TIT','Philemon':'PHM','Hebrews':'HEB','James':'JAS','1 Peter':'1PE',
+                '2 Peter':'2PE','1 John':'1JN','2 John':'2JN','3 John':'3JN','Jude':'JUD',
+                'Revelation':'REV','Congratulations':'REV'
+            };
+            const code = map[firstBook] || 'GEN';
+            return `https://www.bible.com/bible/782/${code}.1.RIPV`;
+        } else {
+            let query = reading.replace(/–/g,'-').replace(/;/g,',').replace(/ /g,'').replace(/Psalm/g,'Ps');
+            query = query.replace(/\(.*\)/g, ''); // remove explanations for reflection
+            return `https://www.biblegateway.com/passage/?search=${encodeURIComponent(query)}&version=${version}`;
+        }
+    }
 
-        function getLink(reading, version) {
-            if (version === 'RIPV') {
-                const firstBook = reading.split(' ')[0].replace(/–.*$/, '').trim();
-                const map = { /* your full book map here */ };
-                const code = map[firstBook] || 'GEN';
-                return `https://www.bible.com/bible/782/${code}.1.RIPV`;
-            } else {
-                const query = reading.replace(/–/g,'-').replace(/;/g,',').replace(/ /g,'');
-                return `https://www.biblegateway.com/passage/?search=${encodeURIComponent(query)}&version=${version}`;
-            }
+    const versionSelect = document.getElementById('version');
+    const datePicker = document.getElementById('datePicker');
+    const statusEl = document.getElementById('status');
+    const contentEl = document.getElementById('content');
+
+    if (localStorage.getItem('bibleVersion')) {
+        versionSelect.value = localStorage.getItem('bibleVersion');
+    }
+
+    versionSelect.addEventListener('change', () => {
+        localStorage.setItem('bibleVersion', versionSelect.value);
+        updateDisplay();
+    });
+
+    datePicker.addEventListener('change', updateDisplay);
+
+    document.querySelector('.reset-today').addEventListener('click', () => {
+        const today = new Date();
+        datePicker.value = today.toISOString().split('T')[0];
+        updateDisplay();
+    });
+
+    function updateDisplay() {
+        if (!datePicker.value) {
+            statusEl.textContent = '';
+            contentEl.innerHTML = '<p style="color:#777;">Select a date to view the reading</p>';
+            return;
         }
 
-        const versionSelect = document.getElementById('version');
-        const datePicker = document.getElementById('datePicker');
-        const content = document.getElementById('content');
+        const selectedDate = new Date(datePicker.value);
+        const year = selectedDate.getFullYear();
+        const month = selectedDate.getMonth();
+        const day = selectedDate.getDate();
 
-        // Restore saved version
-        if (localStorage.getItem('bibleVersion')) {
-            versionSelect.value = localStorage.getItem('bibleVersion');
+        const today = new Date();
+        const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+
+        const entry = readings2026.find(r => 
+            r.date.getFullYear() === year &&
+            r.date.getMonth() === month &&
+            r.date.getDate() === day
+        );
+
+        if (entry) {
+            const dateStr = selectedDate.toLocaleDateString(undefined, {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            statusEl.textContent = isToday ? "Today's Scheduled Reading" : "Selected Date Reading";
+            statusEl.className = `status ${isToday ? 'today' : 'other'}`;
+
+            contentEl.innerHTML = `
+                <h2>${dateStr}</h2>
+                <div class="reading">${entry.reading}</div>
+                <a href="${getLink(entry.reading, versionSelect.value)}" target="_blank" class="read-button">
+                    Read Now (${versionSelect.value})
+                </a>
+            `;
+        } else {
+            statusEl.textContent = "No Scheduled Reading";
+            statusEl.className = 'status other';
+            contentEl.innerHTML = '<p style="color:#777; font-size:1.1rem;">Weekend or holiday — rest or catch up!<br>Plan continues on the next weekday.</p>';
         }
 
-        // Events
-        versionSelect.addEventListener('change', () => {
-            localStorage.setItem('bibleVersion', versionSelect.value);
-            showReading();
-        });
+        contentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 
-        datePicker.addEventListener('change', showReading);
-
-        function showReading() {
-            if (!datePicker.value) {
-                content.innerHTML = `<div class="reading-box"><p>Please select a date to view the reading.</p></div>`;
-                return;
-            }
-
-            const selected = new Date(datePicker.value);
-            selected.setHours(0,0,0,0);
-
-            const entry = readings.find(r => r.date.getTime() === selected.getTime());
-
-            if (entry) {
-                const dateStr = selected.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'});
-                content.innerHTML = `
-                    <div class="reading-box">
-                        <h2>${dateStr}</h2>
-                        <div class="reading">${entry.reading}</div>
-                        <a href="${getLink(entry.reading, versionSelect.value)}" 
-                           target="_blank" class="read-button">
-                            Read Now (${versionSelect.value})
-                        </a>
-                    </div>`;
-            } else {
-                content.innerHTML = `<div class="reading-box"><p>No scheduled reading for this date (weekend or off day).<br>Use the date picker to catch up!</p></div>`;
-            }
-
-            content.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-
-        // === Auto-set today's date and show reading ===
-        window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date();
-            if (today.getFullYear() === 2026) {
-                const todayStr = today.toISOString().split('T')[0];
-                datePicker.value = todayStr;
-                // Force update after setting value
-                setTimeout(showReading, 100);
-            } else {
-                // Fallback for testing outside 2026
-                datePicker.value = '2026-01-05';
-                setTimeout(showReading, 100);
-            }
-        });
-    </script>
+    window.addEventListener('load', () => {
+        datePicker.value = '2026-01-05';  // Today: January 5, 2026
+        updateDisplay();
+    });
+</script>
 </body>
 </html>

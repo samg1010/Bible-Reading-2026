@@ -50,16 +50,22 @@
         .reading-box h2 { margin: 0 0 1.2rem; font-size: clamp(1.4rem, 5vw, 1.8rem); color: var(--primary); }
         .reading { font-size: clamp(1.5rem, 7vw, 2.2rem); font-weight: bold; line-height: 1.35; margin: 1rem 0; color: #1a3c5e; }
         .read-button {
-            display: inline-block; margin-top: 1.4rem; padding: 1rem 2rem;
+            display: inline-block; margin: 1rem 0.5rem; padding: 1rem 2rem;
             background: var(--primary); color: white !important; font-size: 1.2rem; font-weight: 600;
             border-radius: 12px; text-decoration: none; transition: all 0.2s;
         }
+        .read-button.audio {
+            background: var(--today);
+        }
         .read-button:hover { background: #1e2e3f; transform: translateY(-2px); }
+        .read-button.audio:hover { background: #219653; }
+        .buttons { margin-top: 1.5rem; }
         .note { text-align: center; font-size: 0.95rem; color: #555; margin-top: 3rem; line-height: 1.6; }
         @media (max-width: 480px) {
             .container { margin: 0.8rem; border-radius: 12px; }
             .reading { font-size: clamp(1.45rem, 7.5vw, 2rem); }
             .date-row { flex-direction: column; }
+            .read-button { display: block; margin: 0.8rem auto; }
         }
     </style>
 </head>
@@ -81,6 +87,7 @@
             <option value="ESV">ESV (English)</option>
             <option value="NLT">NLT (English)</option>
             <option value="MBBTAG">Magandang Balita Biblia (Tagalog)</option>
+            <option value="ASD">Ang Salita ng Diyos (Tagalog)</option>            
             <option value="RIPV">Ti Baro a Naimbag a Damag Biblia (Ilocano)</option>
         </select>
         <div class="date-row">
@@ -94,11 +101,13 @@
     <div id="status" class="status"></div>
     <div id="content" class="reading-box"></div>
     <div class="note">
-        English & Tagalog → BibleGateway.com<br>
-        Ilocano → bible.com (YouVersion)<br>
+        All versions → YouVersion/Bible.com for reliable audio (plays directly)<br>
+        English text → BibleGateway.com<br>
+        Tagalog & Ilocano text/audio → YouVersion/Bible.com<br>
         <strong>Plan finishes: Revelation 19–22 on December 30, 2026</strong>
     </div>
 </div>
+
 <script>
     const readings2026 = [
   { date: new Date(2026, 0, 1), reading: "Genesis 1–4" },
@@ -385,33 +394,74 @@
   { date: new Date(2026, 12, 30), reading: "Revelation 21–22 (Victory & New Creation)" }
 ];
 
-    function getLink(reading, version) {
-        if (version === 'RIPV') {
+    const bookCodeMap = {
+        'Genesis':'GEN','Exodus':'EXO','Leviticus':'LEV','Numbers':'NUM','Deuteronomy':'DEU',
+        'Joshua':'JOS','Judges':'JDG','Ruth':'RUT','1 Samuel':'1SA','2 Samuel':'2SA',
+        '1 Kings':'1KI','2 Kings':'2KI','1 Chronicles':'1CH','2 Chronicles':'2CH',
+        'Ezra':'EZR','Nehemiah':'NEH','Esther':'EST','Job':'JOB','Psalms':'PSA','Psalm':'PSA',
+        'Proverbs':'PRO','Ecclesiastes':'ECC','Song of Solomon':'SNG','Isaiah':'ISA',
+        'Jeremiah':'JER','Lamentations':'LAM','Ezekiel':'EZK','Daniel':'DAN',
+        'Hosea':'HOS','Joel':'JOL','Amos':'AMO','Obadiah':'OBA','Jonah':'JON',
+        'Micah':'MIC','Nahum':'NAM','Habakkuk':'HAB','Zephaniah':'ZEP','Haggai':'HAG',
+        'Zechariah':'ZEC','Malachi':'MAL','Matthew':'MAT','Mark':'MRK','Luke':'LUK',
+        'John':'JHN','Acts':'ACT','Romans':'ROM','1 Corinthians':'1CO','2 Corinthians':'2CO',
+        'Galatians':'GAL','Ephesians':'EPH','Philippians':'PHP','Colossians':'COL',
+        '1 Thessalonians':'1TH','2 Thessalonians':'2TH','1 Timothy':'1TI','2 Timothy':'2TI',
+        'Titus':'TIT','Philemon':'PHM','Hebrews':'HEB','James':'JAS','1 Peter':'1PE',
+        '2 Peter':'2PE','1 John':'1JN','2 John':'2JN','3 John':'3JN','Jude':'JUD',
+        'Revelation':'REV'
+    };
+
+    const englishAudioIds = {
+        'NIV': '111',
+        'KJV': '1',
+        'ESV': '59',
+        'NLT': '116'
+    };
+
+    function getTextLink(reading, version) {
+        if (version === 'RIPV' || version === 'MBBTAG' || version === 'ASD') {
             const firstBook = reading.split(' ')[0].replace(/–.*$/, '').replace(/:.*/, '').trim();
-            const map = {
-                'Genesis':'GEN','Exodus':'EXO','Leviticus':'LEV','Numbers':'NUM','Deuteronomy':'DEU',
-                'Joshua':'JOS','Judges':'JDG','Ruth':'RUT','1 Samuel':'1SA','2 Samuel':'2SA',
-                '1 Kings':'1KI','2 Kings':'2KI','1 Chronicles':'1CH','2 Chronicles':'2CH',
-                'Ezra':'EZR','Nehemiah':'NEH','Esther':'EST','Job':'JOB','Psalms':'PSA','Psalm':'PSA',
-                'Proverbs':'PRO','Ecclesiastes':'ECC','Song of Solomon':'SNG','Isaiah':'ISA',
-                'Jeremiah':'JER','Lamentations':'LAM','Ezekiel':'EZK','Daniel':'DAN',
-                'Hosea':'HOS','Joel':'JOL','Amos':'AMO','Obadiah':'OBA','Jonah':'JON',
-                'Micah':'MIC','Nahum':'NAM','Habakkuk':'HAB','Zephaniah':'ZEP','Haggai':'HAG',
-                'Zechariah':'ZEC','Malachi':'MAL','Matthew':'MAT','Mark':'MRK','Luke':'LUK',
-                'John':'JHN','Acts':'ACT','Romans':'ROM','1 Corinthians':'1CO','2 Corinthians':'2CO',
-                'Galatians':'GAL','Ephesians':'EPH','Philippians':'PHP','Colossians':'COL',
-                '1 Thessalonians':'1TH','2 Thessalonians':'2TH','1 Timothy':'1TI','2 Timothy':'2TI',
-                'Titus':'TIT','Philemon':'PHM','Hebrews':'HEB','James':'JAS','1 Peter':'1PE',
-                '2 Peter':'2PE','1 John':'1JN','2 John':'2JN','3 John':'3JN','Jude':'JUD',
-                'Revelation':'REV','Congratulations':'REV'
-            };
-            const code = map[firstBook] || 'GEN';
-            return `https://www.bible.com/bible/782/${code}.1.RIPV`;
+            const code = bookCodeMap[firstBook] || 'GEN';
+            const chapter = '1';
+            let versionId;
+            if (version === 'RIPV') versionId = '782';
+            else if (version === 'MBBTAG') versionId = '2197';
+            else if (version === 'ASD') versionId = '1264';
+            return `https://www.bible.com/bible/${versionId}/${code}.${chapter}.${version}`;
         } else {
             let query = reading.replace(/–/g,'-').replace(/;/g,',').replace(/ /g,'').replace(/Psalm/g,'Ps');
-            query = query.replace(/\(.*\)/g, ''); // remove explanations for reflection
+            query = query.replace(/\(.*\)/g, '');
             return `https://www.biblegateway.com/passage/?search=${encodeURIComponent(query)}&version=${version}`;
         }
+    }
+
+    function getAudioLink(reading, version) {
+        let firstPart = reading.split(/[-–,;]/)[0].trim();
+        firstPart = firstPart.replace(/Psalm(s)?/, 'Ps').replace(/ \(.*\)/, '');
+
+        const bookMatch = firstPart.match(/^(.+?)\s*(\d+)$/);
+        let bookName = bookMatch ? bookMatch[1].trim() : firstPart;
+        let chapter = bookMatch ? bookMatch[2] : '1';
+
+        const bookCode = bookCodeMap[bookName] || 'GEN';
+
+        if (englishAudioIds[version]) {
+            // Use YouVersion for English audio (reliable in PH)
+            const vId = englishAudioIds[version];
+            return `https://www.bible.com/audio-bible/${vId}/${bookCode}.${chapter}.${version}`;
+        } 
+        else if (version === 'RIPV') {
+            return `https://www.bible.com/audio-bible/782/${bookCode}.${chapter}.RIPV`;
+        } 
+        else if (version === 'MBBTAG') {
+            return `https://www.bible.com/audio-bible/2197/${bookCode}.${chapter}.MBBTAG`;
+        }
+        else if (version === 'ASD') {
+            return `https://www.bible.com/audio-bible/1264/${bookCode}.${chapter}.ASD`;
+        }
+
+        return null;
     }
 
     const versionSelect = document.getElementById('version');
@@ -451,7 +501,7 @@
         const today = new Date();
         const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
 
-        const entry = readings2026.find(r => 
+        const entry = readings2026.find(r =>
             r.date.getFullYear() === year &&
             r.date.getMonth() === month &&
             r.date.getDate() === day
@@ -461,27 +511,46 @@
             const dateStr = selectedDate.toLocaleDateString(undefined, {
                 weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
             });
+
             statusEl.textContent = isToday ? "Today's Scheduled Reading" : "Selected Date Reading";
             statusEl.className = `status ${isToday ? 'today' : 'other'}`;
+
+            const textUrl = getTextLink(entry.reading, versionSelect.value);
+            const audioUrl = getAudioLink(entry.reading, versionSelect.value);
+
+            let buttonsHtml = `
+                <a href="${textUrl}" target="_blank" class="read-button">
+                    Read Now (${versionSelect.value})
+                </a>
+            `;
+
+            if (audioUrl) {
+                buttonsHtml += `
+                    <a href="${audioUrl}" target="_blank" class="read-button audio">
+                        Listen to Audio
+                    </a>
+                `;
+            }
 
             contentEl.innerHTML = `
                 <h2>${dateStr}</h2>
                 <div class="reading">${entry.reading}</div>
-                <a href="${getLink(entry.reading, versionSelect.value)}" target="_blank" class="read-button">
-                    Read Now (${versionSelect.value})
-                </a>
+                <div class="buttons">
+                    ${buttonsHtml}
+                </div>
             `;
         } else {
             statusEl.textContent = "No Scheduled Reading";
             statusEl.className = 'status other';
-            contentEl.innerHTML = '<p style="color:#777; font-size:1.1rem;">Weekend or holiday — rest or catch up!<br>Plan continues on the next weekday.</p>';
+            contentEl.innerHTML = '<p style="color:#777; font-size:1.1rem;">No assigned reading today (possible rest/catch-up day).<br>Use the date picker to jump to the next scheduled day!</p>';
         }
 
         contentEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     window.addEventListener('load', () => {
-        datePicker.value = '2026-01-05';  // Today: January 5, 2026
+        const today = new Date();
+        datePicker.value = today.toISOString().split('T')[0];
         updateDisplay();
     });
 </script>
